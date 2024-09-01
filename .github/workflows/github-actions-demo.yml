@@ -77,9 +77,6 @@ jobs:
       - name: Install GuardDog
         run: pip install guarddog
 
-      - name: Install requirements.txt
-        run: pip install -r requirements.txt
-        
       - name: Verify Dependencies
         run: guarddog pypi verify requirements.txt --output-format sarif --exclude-rules repository_integrity_mismatch > guarddog.sarif
 
