@@ -1,0 +1,58 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+  coderabbit:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Coderabbit
+        run: |
+          curl -sSL https://coderabbit.io/install.sh | bash
+          coderabbit setup --api-key ${{ secrets.CODERABBIT_API_KEY }}
+
+      - name: Run Coderabbit
+        run: coderabbit analyze
+
+      - name: Upload Coderabbit Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: coderabbit-report
+          path: ./coderabbit-report
+
+  build:
+    runs-on: ubuntu-latest
+    needs: coderabbit
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build project
+        run: npm run build
+
+      - name: Run tests
+        run: npm test
