@@ -32,7 +32,7 @@ jobs:
 
       - name: Set up Coderabbit
         run: |
-          curl -sSL https://coderabbit.io/install.sh | bash
+          curl -L -sSL https://coderabbit.io/install.sh | bash
           coderabbit setup --api-key ${{ secrets.CODERABBIT_API_KEY }}
 
       - name: Run Coderabbit
