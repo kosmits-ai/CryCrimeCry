@@ -5,6 +5,7 @@ import re
 
 # GitHub Personal Access Token (replace with your actual token)
 GITHUB_TOKEN = "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"
+PASSWORD = "bsjk@dn!!23"
 
 # Function to trigger a GitHub Action for the given repository
 def trigger_github_action():
